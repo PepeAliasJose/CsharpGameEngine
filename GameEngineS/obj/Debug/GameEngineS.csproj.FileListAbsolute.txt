@@ -1,0 +1,10 @@
+E:\GitHub\CsharpGameEngine\GameEngineS\bin\Debug\GameEngineS.exe.config
+E:\GitHub\CsharpGameEngine\GameEngineS\bin\Debug\GameEngineS.exe
+E:\GitHub\CsharpGameEngine\GameEngineS\bin\Debug\GameEngineS.pdb
+E:\GitHub\CsharpGameEngine\GameEngineS\obj\Debug\GameEngineS.csproj.AssemblyReference.cache
+E:\GitHub\CsharpGameEngine\GameEngineS\obj\Debug\GameEngineS.csproj.SuggestedBindingRedirects.cache
+E:\GitHub\CsharpGameEngine\GameEngineS\obj\Debug\GameEngineS.Properties.Resources.resources
+E:\GitHub\CsharpGameEngine\GameEngineS\obj\Debug\GameEngineS.csproj.GenerateResource.cache
+E:\GitHub\CsharpGameEngine\GameEngineS\obj\Debug\GameEngineS.csproj.CoreCompileInputs.cache
+E:\GitHub\CsharpGameEngine\GameEngineS\obj\Debug\GameEngineS.exe
+E:\GitHub\CsharpGameEngine\GameEngineS\obj\Debug\GameEngineS.pdb
