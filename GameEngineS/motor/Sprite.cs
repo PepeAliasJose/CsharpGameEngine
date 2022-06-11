@@ -15,7 +15,7 @@ namespace GameEngineS.motor
         public String archivo = "";
         public string nombre = "";
         public int IdFigura;
-        public Bitmap sprite = null;
+        private Bitmap sprite = null;
 
         public Sprite(vector posicion, vector escala,string archivo, string nombre)
         {
@@ -29,14 +29,17 @@ namespace GameEngineS.motor
             sprite = bitmap;
 
             log.informacion($"[Sprite]({this.nombre}) - Se ha creado");
-            //Motor.agregarSprite(this);//al crearse se autoañade a la lista de Sprites del motor
+            
             
         }
 
-        public void Destruir()
-        {
-            log.informacion($"[Sprite]({this.nombre}) - Se ha borrado");
-            //Motor.borrarSprite(this);//se borra a si mismo de la lista del motor
+        /// <summary>
+        /// devuelve el bitmap del sprite
+        /// </summary>
+        /// <returns></returns>
+        public Bitmap getImagen() {
+            return this.sprite;
         }
+        
     }
 }

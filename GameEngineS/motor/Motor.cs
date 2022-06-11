@@ -14,7 +14,7 @@ namespace GameEngineS.motor
      {
         public window() 
         { 
-            this.DoubleBuffered = true; 
+            this.DoubleBuffered = true;
         }
      }
     //abstract indica que una clase está diseñada como clase base de otras clases, no para crear instancias por sí misma
@@ -30,16 +30,45 @@ namespace GameEngineS.motor
         private Thread bucleTiempo = null;//tiempo para el bucle
 
         //Listas de contenido 
-        private static List<figura> AllFiguras = new List<figura>();
-        private static List<Sprite> AllSprites = new List<Sprite>();
+        private static List<personaje> AllFiguras = new List<personaje>();
+        private static List<terreno> AllTerreno = new List<terreno>();
 
         //fondo por defecto
         public Color fondo = Color.Blue;
+        
 
+        //camara para desplazamiento
         public vector camara = new vector().cero();
 
 
+        /// <summary>
+        /// devuelve los objetos alrededor del area del jugador que sean terreno
+        /// asi puedes hacer calculos con los objetos a su alrededor que interactuen con el no 
+        /// con todo el mapa
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="Sx"></param>
+        /// <param name="Sy"></param>
+        /// <returns></returns>
+        public static List<terreno> getTerreno(int x, int y, int Sx, int Sy) 
+        {
+            List<terreno> ret = new List<terreno>();
 
+            for (int a = 0; a < AllTerreno.Count; a++)
+            {
+                if (x + Sx >= AllTerreno[a].posicion.x &&
+                x <= AllTerreno[a].posicion.x + AllTerreno[a].escala.x &&
+                y + Sy >= AllTerreno[a].posicion.y &&
+                y <= AllTerreno[a].posicion.y + AllTerreno[a].escala.y)
+                {
+                    ret.Add(AllTerreno[a]);
+                }
+                
+            }
+
+            return ret;
+        }
 
         public Motor(vector size, string titulo) {
             log.informacion("El juego esta empezando...");
@@ -70,14 +99,19 @@ namespace GameEngineS.motor
             Application.Run(cuadro);
         }
 
-        
+
+        /// <summary>
+        /// entrada de tecla pulsada
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Cuadro_KeyUp(object sender, KeyEventArgs e)
         {
             teclaSoltada(e);
         }
 
         /// <summary>
-        /// entrada de tecla pulsada 
+        /// entrada de tecla soltada
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -93,14 +127,14 @@ namespace GameEngineS.motor
         /// añade una figura a la lista de figuras
         /// </summary>
         /// <param name="figura"></param>
-        public static void agregarFigura(figura figura) {
+        public static void agregarFigura(personaje figura) {
             AllFiguras.Add(figura);
         }
         /// <summary>
         /// quita una figura a la lista de figuras
         /// </summary>
         /// <param name="figura"></param>
-        public static void borrarFigura(figura figura)
+        public static void borrarFigura(personaje figura)
         {
             AllFiguras.Remove(figura);
         }
@@ -110,17 +144,17 @@ namespace GameEngineS.motor
         /// añade un sprite a la lista de sprites
         /// </summary>
         /// <param name="sprite"></param>
-        public static void agregarSprite(Sprite sprite)
+        public static void agregarTerreno(terreno t)
         {
-            AllSprites.Add(sprite);
+            AllTerreno.Add(t);
         }
         /// <summary>
         /// quita un sprite de la lista de sprites
         /// </summary>
         /// <param name="sprite"></param>
-        public static void borrarSprite(Sprite sprite)
+        public static void borrarTerrno(terreno t)
         {
-            AllSprites.Remove(sprite);
+            AllTerreno.Remove(t);
         }
 
 
@@ -141,9 +175,9 @@ namespace GameEngineS.motor
                 {
 
                     Actualiza();//actualiza
-                    Pinta();//pinta
+                    Fisicas();
                     cuadro.BeginInvoke((MethodInvoker)delegate {cuadro.Refresh(); });
-                    Thread.Sleep(8);
+                    Thread.Sleep(1);
 
                 }
                 catch 
@@ -172,11 +206,18 @@ namespace GameEngineS.motor
             //    figura.pintar(g);
             //}
 
+            //pintas el terreno
+            for (int y = 0; y < AllTerreno.Count; y++)
+            {
+                AllTerreno[y].pintar(g);
+            }
+
+            //pinta el personaje luego pa que quede por encima
             for (int x = 0; x < AllFiguras.Count; x++) {
                 AllFiguras[x].pintar(g);
             }
-
             
+
         }
 
 
@@ -190,7 +231,7 @@ namespace GameEngineS.motor
         /// <summary>
         /// Pinta las cosas en la pantalla
         /// </summary>
-        public abstract void Pinta();
+        public abstract void Fisicas();
 
 
         /// <summary>
@@ -200,5 +241,6 @@ namespace GameEngineS.motor
         /// <param name="e"></param>
         public abstract void teclaPulsada(KeyEventArgs e);
         public abstract void teclaSoltada(KeyEventArgs e);
+        
     }
 }

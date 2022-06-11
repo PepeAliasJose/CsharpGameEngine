@@ -47,12 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Demo.cs" />
-    <Compile Include="motor\figura.cs" />
+    <Compile Include="motor\personaje.cs" />
     <Compile Include="motor\log.cs" />
     <Compile Include="motor\Motor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="motor\Sprite.cs" />
+    <Compile Include="motor\terreno.cs" />
     <Compile Include="motor\vector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
