@@ -32,6 +32,9 @@ namespace GameEngineS.motor
         //Listas de contenido 
         private static List<personaje> AllFiguras = new List<personaje>();
         private static List<terreno> AllTerreno = new List<terreno>();
+        private static List<cannon> todosCannon = new List<cannon>();
+        private static List<Odin> allOdin = new List<Odin>();
+        private static List<Bala> balas = new List<Bala>(); 
 
         //fondo por defecto
         public Color fondo = Color.Blue;
@@ -40,36 +43,23 @@ namespace GameEngineS.motor
         //camara para desplazamiento
         public vector camara = new vector().cero();
 
-
         /// <summary>
-        /// devuelve los objetos alrededor del area del jugador que sean terreno
-        /// asi puedes hacer calculos con los objetos a su alrededor que interactuen con el no 
-        /// con todo el mapa
+        /// 
+        ///  -- ELEMENTOS DEL MOTOR --
+        /// 
+        /// + Personaje con vida +
+        /// + Terreno +
+        /// + Entrada de teclado +
+        /// + Comprobacion dentro del objeto para comprobar colisiones +
+        /// + Funcion que devuelve los objetos dentro de un area especificada para luego hacer
+        ///   cualquier tipo de calculos con elementos cercanos a un objeto para ahorrar recursos
+        /// + cañones que disparan 1 sola bala
+        /// + balas
+        /// + (EN PROCESO) metralleta 
+        /// 
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="Sx"></param>
-        /// <param name="Sy"></param>
-        /// <returns></returns>
-        public static List<terreno> getTerreno(int x, int y, int Sx, int Sy) 
-        {
-            List<terreno> ret = new List<terreno>();
-
-            for (int a = 0; a < AllTerreno.Count; a++)
-            {
-                if (x + Sx >= AllTerreno[a].posicion.x &&
-                x <= AllTerreno[a].posicion.x + AllTerreno[a].escala.x &&
-                y + Sy >= AllTerreno[a].posicion.y &&
-                y <= AllTerreno[a].posicion.y + AllTerreno[a].escala.y)
-                {
-                    ret.Add(AllTerreno[a]);
-                }
-                
-            }
-
-            return ret;
-        }
-
+        /// <param name="size"></param>
+        /// <param name="titulo"></param>
         public Motor(vector size, string titulo) {
             log.informacion("El juego esta empezando...");
             this.size = size;
@@ -98,66 +88,6 @@ namespace GameEngineS.motor
 
             Application.Run(cuadro);
         }
-
-
-        /// <summary>
-        /// entrada de tecla pulsada
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Cuadro_KeyUp(object sender, KeyEventArgs e)
-        {
-            teclaSoltada(e);
-        }
-
-        /// <summary>
-        /// entrada de tecla soltada
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Cuadro_KeyDown(object sender, KeyEventArgs e)
-        {
-            teclaPulsada(e);
-        }
-
-
-
-
-        /// <summary>
-        /// añade una figura a la lista de figuras
-        /// </summary>
-        /// <param name="figura"></param>
-        public static void agregarFigura(personaje figura) {
-            AllFiguras.Add(figura);
-        }
-        /// <summary>
-        /// quita una figura a la lista de figuras
-        /// </summary>
-        /// <param name="figura"></param>
-        public static void borrarFigura(personaje figura)
-        {
-            AllFiguras.Remove(figura);
-        }
-
-
-        /// <summary>
-        /// añade un sprite a la lista de sprites
-        /// </summary>
-        /// <param name="sprite"></param>
-        public static void agregarTerreno(terreno t)
-        {
-            AllTerreno.Add(t);
-        }
-        /// <summary>
-        /// quita un sprite de la lista de sprites
-        /// </summary>
-        /// <param name="sprite"></param>
-        public static void borrarTerrno(terreno t)
-        {
-            AllTerreno.Remove(t);
-        }
-
-
 
 
         /// <summary>
@@ -211,18 +141,176 @@ namespace GameEngineS.motor
             {
                 AllTerreno[y].pintar(g);
             }
+            for (int x = 0; x < todosCannon.Count; x++)
+            {
+                todosCannon[x].pintar(g);
+            }
+            for (int x = 0; x < allOdin.Count; x++)
+            {
+                allOdin[x].pintar(g);
+            }
+            for (int x = 0; x < balas.Count; x++) 
+            { 
+                balas[x].pintar(g);
+                balas[x].moverBala();
+            }
+
 
             //pinta el personaje luego pa que quede por encima
             for (int x = 0; x < AllFiguras.Count; x++) {
                 AllFiguras[x].pintar(g);
             }
-            
+
+
+           
 
         }
 
 
+       
+
+        // personaje
+        
+        /// <summary>
+        /// añade una figura a la lista de figuras
+        /// </summary>
+        /// <param name="figura"></param>
+        public static void agregarFigura(personaje figura)
+        {
+            AllFiguras.Add(figura);
+        }
+        /// <summary>
+        /// quita una figura a la lista de figuras
+        /// </summary>
+        /// <param name="figura"></param>
+        public static void borrarFigura(personaje figura)
+        {
+            AllFiguras.Remove(figura);
+        }
+
+        // terrenos 
+
+        /// <summary>
+        /// añade un sprite a la lista de sprites
+        /// </summary>
+        /// <param name="sprite"></param>
+        public static void agregarTerreno(terreno t)
+        {
+            AllTerreno.Add(t);
+        }
+        /// <summary>
+        /// quita un sprite de la lista de sprites
+        /// </summary>
+        /// <param name="sprite"></param>
+        public static void borrarTerrno(terreno t)
+        {
+            AllTerreno.Remove(t);
+        }
+        /// <summary>
+        /// devuelve los objetos alrededor del area del jugador que sean terreno
+        /// asi puedes hacer calculos con los objetos a su alrededor que interactuen con el no 
+        /// con todo el mapa
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="Sx"></param>
+        /// <param name="Sy"></param>
+        /// <returns></returns>
+        public static List<terreno> getTerreno()
+        {
+            //int x, int y, int Sx, int Sy
+            /*List<terreno> ret = new List<terreno>();
+
+            for (int a = 0; a < AllTerreno.Count; a++)
+            {
+                if (x + Sx >= AllTerreno[a].posicion.x &&
+                x <= AllTerreno[a].posicion.x + AllTerreno[a].escala.x &&
+                y + Sy >= AllTerreno[a].posicion.y &&
+                y <= AllTerreno[a].posicion.y + AllTerreno[a].escala.y)
+                {
+                    ret.Add(AllTerreno[a]);
+                }
+                
+            }*/
+
+            return AllTerreno;
+        }
 
 
+        //cañones
+        internal static void agregarCannon(cannon cannon)
+        {
+            todosCannon.Add(cannon);
+        }
+        internal static void borrarCannon(cannon cannon)
+        {
+            todosCannon.Remove(cannon);
+        }
+        public static List<cannon> getCannon()
+        {
+            return todosCannon;
+        }
+
+        //balas
+        internal static void agregarBala(Bala b)
+        {
+            balas.Add(b);
+        }
+        internal static void borrarBala(Bala b)
+        {
+            balas.Remove(b);
+        }
+        internal static bool existeBala(int id)
+        {
+            for (int x = 0; x < balas.Count; x++)
+            {
+                if (balas[x].id == id)
+                {
+                    //Console.WriteLine($"Bala con id: {id} existe");
+                    return true;
+                }
+            }
+            return false;
+            //Console.WriteLine($"Bala con id: {id} NO existe");
+        }
+       
+
+
+        //odin
+        internal static void agregarOdin(Odin o)
+        {
+            allOdin.Add(o);
+        }
+        internal static void borrarOdin(Odin o)
+        {
+            allOdin.Remove(o);
+        }
+        public static List<Odin> getOdin() {
+        return allOdin;
+        }
+
+
+        //entrada teclado
+        /// <summary>
+        /// entrada de tecla pulsada
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Cuadro_KeyUp(object sender, KeyEventArgs e)
+        {
+            teclaSoltada(e);
+        }
+        /// <summary>
+        /// entrada de tecla soltada
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Cuadro_KeyDown(object sender, KeyEventArgs e)
+        {
+            teclaPulsada(e);
+        }
+
+        //metodos abstractos
         public abstract void carga();
         /// <summary>
         /// Actualiza las fisicas del juego

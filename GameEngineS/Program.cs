@@ -10,7 +10,8 @@ namespace GameEngineS
     {
         static void Main(string[] args)
         {
-            Demo juego = new Demo();
+            //Demo juego = new Demo();
+            DemoTrayectoria juego = new DemoTrayectoria();
         }
     }
 }

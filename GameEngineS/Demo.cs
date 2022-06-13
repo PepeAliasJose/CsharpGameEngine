@@ -132,9 +132,9 @@ namespace GameEngineS
             //camara.x = 100;
             //camara.y = 200;
 
-            terrenos = Motor.getTerreno((int)jugador.posicion.x - 100, (int)jugador.posicion.y - 100,
-                (int) (jugador.posicion.x + jugador.escala.x + 100), (int) (jugador.posicion.y + jugador.escala.y + 100));
-
+            terrenos = Motor.getTerreno();
+            //(int)jugador.posicion.x - 100, (int)jugador.posicion.y - 100,
+           // (int)(jugador.posicion.x + jugador.escala.x + 100), (int)(jugador.posicion.y + jugador.escala.y + 100)
             interaccionJugador(terrenos);
             
 
@@ -172,7 +172,7 @@ namespace GameEngineS
             {
                 if (terrenos[y].nombre == "suelo")
                 {
-                    colision = terrenos[y].colision(jugador);
+                    colision = terrenos[y].colision(jugador,0,0);
                     if (colision)
                     {
                         haCaido = true;
@@ -183,7 +183,7 @@ namespace GameEngineS
                 }
                 if (terrenos[y].nombre == "pincho")
                 {
-                    colision = terrenos[y].colision(jugador);
+                    colision = terrenos[y].colision(jugador,0,0);
                     if (colision)
                     {
                         jugador.posicion.x = posInicial.x;
@@ -203,7 +203,7 @@ namespace GameEngineS
         bool activarSalto = true;
         bool soltado = false;//especifico para que salte solo cuando se pulse el boton
         
-        public override void Fisicas()
+        public override void Fisicas()//El salto es bastante mejorable (PENDIENTE)
         {
             //salto de prueba
 

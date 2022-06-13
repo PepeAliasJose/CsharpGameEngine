@@ -51,12 +51,12 @@ namespace GameEngineS.motor
             this.sprite = sprite;
         }
 
-        public bool colision(personaje a)
+        public bool colision(personaje a,float correccionAncho, float coreccionAlto)
         {
-            if (this.posicion.x + this.escala.x > a.posicion.x &&
-                this.posicion.x < a.posicion.x + a.escala.x &&
-                this.posicion.y + this.escala.y > a.posicion.y &&
-                this.posicion.y < a.posicion.y + a.escala.y) 
+            if (this.posicion.x + this.escala.x > a.posicion.x + correccionAncho &&
+                this.posicion.x < a.posicion.x + a.escala.x - correccionAncho &&
+                this.posicion.y + this.escala.y > a.posicion.y + coreccionAlto &&
+                this.posicion.y < a.posicion.y + a.escala.y - coreccionAlto) 
             {
                 return true;
             }
@@ -77,5 +77,7 @@ namespace GameEngineS.motor
             log.informacion($"[Figura]({this.nombre}) - Se ha borrado");
             Motor.borrarTerrno(this);//se borra a si mismo de la lista del motor
         }
+
+       
     }
 }
